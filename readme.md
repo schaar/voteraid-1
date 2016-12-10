@@ -1,24 +1,7 @@
-# README
+# VoterAid
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+*Stop voter intimidation before it starts.*
 
-Things you may want to cover:
+## Roadmap
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+![](https://cloud.githubusercontent.com/assets/3597934/21071690/99a72dc4-be5d-11e6-94bf-e93fbba36e02.JPG)
