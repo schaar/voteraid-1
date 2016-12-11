@@ -11,14 +11,14 @@ Rails.application.routes.draw do
 
   # Messages routes:
   post 'messages/reply', to: 'messages#reply'
-  post 'messages/find_poll_addr', to: 'messages#find_poll_addr'
+  # post 'messages/find_poll_addr', to: 'messages#find_poll_addr'
 
   get '*path', to: 'pages#index'
 
-  resource :messages do
-    collection do
-      post 'reply'
-    end
-  end
+  # resource :messages do
+  #   collection do
+  #     post 'reply'
+  #   end
+  # end
 
 end
