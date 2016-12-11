@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
   def reply
     message_body = params["Body"]
     from_number = params["From"]
-    @responder = Responder.find_by(phone: from_number)
+    @responder = Responder.find_by phone: from_number 
     if session["request_id"].nil? && @responder.nil?
       @req = Request.create!({phone: from_number, status: 1, responder_id: nil})
       @message = @req.messages.create({body: message_body})
