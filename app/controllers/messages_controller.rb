@@ -1,6 +1,9 @@
 class MessagesController < ApplicationController 
  skip_before_filter :verify_authenticity_token
  #skip_before_filter :authenticate_user!, :only => "reply"
+  require 'net/http'
+  require 'json'
+  include MessagesHelper
 
   def reply
     message_body = params["Body"]
@@ -19,4 +22,7 @@ class MessagesController < ApplicationController
   def boot_twilio
     @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
   end
+
+
+
 end
