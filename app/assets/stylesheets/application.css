@@ -19,7 +19,18 @@
    margin-top: 10;
  }
 
+
  .heroimage {
    max-width: 100%;
    height: auto !important;
  }
+
+ .btn-register {
+   margin-top: 30px;
+ }
+
+ .bold {
+   font-weight: 900;
+ }
+
+ 
