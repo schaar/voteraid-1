@@ -1,10 +1,19 @@
 # VoterAid
 
-*Stop voter intimidation before it starts.*
+*Stop voter intimidation at the source.*
 
-## Roadmap
+## What it does
 
-![](https://cloud.githubusercontent.com/assets/3597934/21071690/99a72dc4-be5d-11e6-94bf-e93fbba36e02.JPG)
+**VoterAid** is a technology solution designed to address the threat of voter intimidation. We aim to accomplish the following:
+
+- Register On-The-Ground Responders for Election Day
+- Inform voters of their rights
+- Report potential instances of voter suppression
+- Respond to instances of voter suppression immediately
+- Analyze reported incidents to influence policy
+
+## The Brains
+
 
 
 ## Setup
