@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
     message_body = params["Body"]
     from_number = params["From"]
     if session["request_id"].nil?
-      @req = Request.create!({phone: from_number, status: 0, responder_id: nil})
+      @req = Request.create!({phone: from_number, status: 1, responder_id: nil})
       @message = @req.messages.create({body: message_body})
     else
       @req = Request.find(session["request_id"])
@@ -28,7 +28,7 @@ class MessagesController < ApplicationController
       from: ENV["TWILIO_NUMBER"],
       to: from_number,
       body: "Request ID: #{@req.id}. Your number is #{from_number}. \
-         #{body}"
+         #{@body}"
     )
     
   end

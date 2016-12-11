@@ -3,28 +3,29 @@ module MessagesHelper
   require "uri"
 
   def handler(req, message)
-    case req.status 
-    when 1:
-      return "Welcome to Voteraid. What's your location?"
-    when 2: # User responds with location
-      return find_poll_addr(message) 
-    when 3:
-      return "What's your issue?"
-    when 4: # User responds with issue"
-      return find_issue(message)
-    when 5:
+    req.update_attribute(:status, req.status + 1)
+    puts "Incoming request status : #{req.status} - #{message.body}"
+    case req.status
+    when 1
+      return "Welcome to VoterAid. What's your location?"
+    when 2 # User responds with location
+      return handle_address(req, message)
+    when 4 # User responds with issue"
+      return find_issue(req, message)
+    when 5
       return "Do you need to be connected to a responder?"
-    when 6: # If yes, connect to responders; if no, set value to resolved 
-      if message == "no" || message == "No" 
+    when 6 # If yes, connect to responders; if no, set value to resolved
+      if message.body == "no" || message.body == "No"
+        req.update_attribute(:status, 9)
         return "Congratulations! Your case has been resolved"
-      else 
+      else
         return find_responder(req.address)
       end
-    when 7:#??????????????????
+    when 7 #??????????????????
       return "Responder confirms. You are connected to Responder blablabla"
-    when 8:
+    when 8
       return "Has your issue been resolved or not?"
-    when 9:
+    when 9
       if message == "yes" || message == "Yes"
         return "Congratulations! Your case has been resolved"
       else
@@ -33,12 +34,27 @@ module MessagesHelper
     end
   end
 
-  def find_issue(message)
-    return "find issue number " + message
+  def find_issue(req, message)
+    num = message.body.to_i
+    if (num>0 && num < 9)
+      req.update_attribute(:issue, num)
+      return "Thanks"
+    else
+      ## DO NOT INCREMENT STATE
+      req.update_attribute(:status, req.status-1)
+      return "Sorry, invalid input. Please reply with the number code of your issue"
+    end
   end
 
   def find_responder(requester_address)
     return "find responder near " + requester_address
+  end
+
+  def handle_address(req, message)
+
+    req.update_attributes({address: message.body, status: req.status + 1})
+    text = "Thank you. What is your issue?\n1.Problem with ID\n2.Name not on registration list\n3.Eligibility to vote was challenged\n4.Can't check in at the poll\n5.Problem with voting machine\n6.Line to vote is too long\n7.Problem with provisional ballot\n8.Problem with provisional ballot"
+    return text
   end
 
   def find_poll_addr(message_addr)
