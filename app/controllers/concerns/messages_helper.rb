@@ -27,10 +27,10 @@ module MessagesHelper
     when 5 
       req.update_attribute({desc: message.body, status: req.status + 1}) 
       contact_nearby_responders(req, message)
-      set_timer() # don't need to implement for demo???????
       return "Connecting to responders. We appreciate your patience"
     when 6
-      return "waiting 30 minutes"
+      return "Please wait. We are still matching your request up."
+      # return "waiting 30 minutes"
     when 7
       ## ToDo: set listener to hear responder's feedback
       req.update_attribute(status: req.status + 1)
@@ -86,6 +86,16 @@ module MessagesHelper
       puts "Sent message to #{value}"
   end
 
+  def handle_responder(req,responder_id)
+      if confirm_respondent(req, responder_id)
+        req.update_attributes({status: req.status + 1, responder_id: responder_id})
+        send_confirm_to_requester(req)
+        return "Thank you for helping. P..."
+      else 
+        return "Thank you for offering your assistance. Someone else has already been assigned to this request."  
+      end
+  end
+
   def index_to_issue(index) 
     case index
     when 1
@@ -107,18 +117,20 @@ module MessagesHelper
     end
   end
 
-  def set_timer()
+  def send_confirm_to_requester(req)
+    @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
+    from = ENV["TWILIO_NUMBER"] 
+    responder = req.responder
+    client.account.messages.create(
+      :from => from,
+      :to => req.phone,
+      :body => "Congratulations! We find someone who could assist you. His/Her name \
+      is #{responder.fname} + #{responder.lname} and phone number is: #{responder.phone} "
+    )
+    puts "Sent message to #{value}"
   end
 
-  def reject_other_respondents(req, message)
-  end
 
-  def confirm_respondent(req, message)
-  end
-
-  def confirm_requester(req, message)
-  end
- 
   def find_poll_addr(message_addr)
     # m_request_id = Message.find_by(request_id: m_request_id)
     ## below are referenced from http://www.rubyinside.com/nethttp-cheat-sheet-2940.html\
