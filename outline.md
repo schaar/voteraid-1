@@ -15,11 +15,11 @@
   6. line to vote is too long
   7. problem with provisional ballot
   8. other
-3. User responds with issue number, record it, return information if needed
-4. Ask user if they want to be connected to a responder
-5. User respond if need responder.
-   -If yes, return to user immediately "connecting now...";
+3. User responds with issue number, record it, return information if needed, and always ask user if they want to be connected to a responder
+4. User respond if need responder.
+   -If yes, return to user immediately "describe your issue";
    -if no, set value to resolved, close case, go to status 9
+5. User respond their issue, record, return "connecting to responder"
 6. Send to all potential responders, wait for 30 minutes
 7. One responder reply, send "closed" to other responders, send requestor info to responder, send responder info to requestor.
 8. After some hours, contact requestor "Let us know it has been resolved or not?"
