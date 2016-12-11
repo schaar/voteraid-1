@@ -12,13 +12,18 @@ class MessagesController < ApplicationController
   def reply
     message_body = params["Body"]
     from_number = params["From"]
-    if session["request_id"].nil?
+    @responder = Responder.find_by(phone: from_number)
+    if session["request_id"].nil? && @responder.nil?
       @req = Request.create!({phone: from_number, status: 1, responder_id: nil})
       @message = @req.messages.create({body: message_body})
     else
-      @req = Request.find(session["request_id"])
-      if session['responder_id'] and /Y(es)?/i.match(message_body)
-        @message = handle_responder(@req, session['responder_id'])
+      if @responder
+        @req = Request.last
+      else
+        @req = Request.find(session["request_id"])
+      end
+      if @responder and /Y(es)?/i.match(message_body)
+        @message = handle_responder(@req, @responder.id)
       else
         @message = @req.messages.create({body: message_body})
       end
