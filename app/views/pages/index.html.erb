@@ -16,7 +16,8 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="page-scroll" href="#download">Register as a Responder</a>
+            <%= link_to "Register as a Responder", new_responder_path, :method => :get, :class => 'page-scroll' %>
+            <!-- <a class="page-scroll" href="#download">Register as a Responder</a> -->
           </li>
           <li>
             <a class="page-scroll" href="#contact">About</a>
