@@ -37,13 +37,11 @@ rbenv init
 rbenv install 2.3.0
 rbenv global 2.3.0
 ```
-
 2. Install and start PostgreSQL
 ```
 brew install postgresql
 brew services start postgresql
 ```
-
 3. Clone the repository and then change into the application's directory
     - If you are using https:
     ```
@@ -55,19 +53,16 @@ brew services start postgresql
     git clone git@github.com:Voter-Aid/voteraid.git
     cd voteraid
     ```
-
 4. Install bundler, which is the dependency manager for ruby, and then install the required dependencies for our application
 ```
 gem install bundler
 bundle install
 ```
-
 5. Create and migrate the application database
 ```
 rails db:create
 rails db:migrate
 ```
-
 6. Run!
 ```
 rails s
