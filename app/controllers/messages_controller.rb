@@ -21,10 +21,14 @@ class MessagesController < ApplicationController
     end
     session["request_id"] = @req.id
     boot_twilio
+    # when reply, test to return the nearest polling address
+    poll_addr = find_poll_addr("2020 kittredge street")
     sms = @client.messages.create(
       from: ENV["TWILIO_NUMBER"],
       to: from_number,
-      body: "Hello there, thanks for texting me. Your request is #{@req.id} "
+      body: "Request ID: #{@req.id}. Your number is #{from_number}. \
+            your nearest voting stationis #{poll_addr}"
+
     )
     
   end
