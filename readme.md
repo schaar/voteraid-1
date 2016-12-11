@@ -23,7 +23,7 @@ For our tech stack, we are using:
 
 ## Contributing
 
-We welcome help from the community and we are open to pull requests. Feel free to contribute!
+We welcome help from the community and we are open to pull requests. You can find our requested [features here](https://github.com/Voter-Aid/voteraid/projects/2). Feel free to contribute!
 
 ## Setup for MacOS
 1. Install Ruby v2.3.0. We highly suggest that you do so using a version manager such as rbenv, like the example below
