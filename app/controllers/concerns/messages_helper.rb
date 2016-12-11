@@ -73,5 +73,5 @@ module MessagesHelper
           line2 = address_hash['line2'] || ""
           line3 = address_hash['line3'] || ""
           return "Your nearest voting station is: " + locationName+line1+line2+line3
-    end
   end
+end
