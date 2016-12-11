@@ -39,8 +39,7 @@ class MessagesController < ApplicationController
     sms = @client.messages.create(
       from: ENV["TWILIO_NUMBER"],
       to: from_number,
-      body: "Request ID: #{@req.id}. Your number is #{from_number}. \
-         #{@body}"
+      body: @body
     )
     if @nearby
       from = ENV["TWILIO_NUMBER"]
