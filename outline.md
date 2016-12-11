@@ -17,12 +17,11 @@
   6. line to vote is too long
   7. problem with provisional ballot
   8. other
-5. Ask if user needs a responder
-6. If yes, ask for address; if no, set value to resolved
-7. Contact responders
-8. If responder confirms, send info to user
-9. Let us know it has been resolved or not?
-10. Resolved
+5. Ask if user needs a responder;
+6. if yes, contact responders; if no, set value to resolved
+7. If responder confirms, send info to user
+8. Let us know it has been resolved or not?
+9. Resolved
 
 ### Routing Process
 - Store request ID in session
