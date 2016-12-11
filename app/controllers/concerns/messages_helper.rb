@@ -1,6 +1,6 @@
 module MessagesHelper
   require 'net/https'
-  require "uri"
+  require 'uri'
 
   require 'rubygems'
   require 'twilio-ruby'
@@ -18,7 +18,7 @@ module MessagesHelper
     when 4
       if /n(o)?/i =~ message.body 
         req.update_attribute(:status, 9)
-        return "Congratulations! Your case has been resolved"
+        return 'Congratulations! Your case has been resolved'
       else
         req.update_attribute(:status, req.status + 1)
         return "Could you provide a detailed description?"
@@ -28,10 +28,10 @@ module MessagesHelper
     when 8 # already contact requestor "Let us know it has been resolved or not?"
       if  /y(es)?/i =~ message.body 
         req.update_attribute(:status, 9)
-        return "Congratulations! Your case has been resolved"
+        return 'Congratulations! Your case has been resolved'
       else
         req.update_attribute(:status, 10)
-        return "We are sorry that we are unavailable to solve the issue right now"
+        return 'We are sorry that we are unavailable to solve the issue right now'
       end
     end
   end
@@ -74,7 +74,8 @@ module MessagesHelper
           line1 = address_hash['line1'] || ""
           line2 = address_hash['line2'] || ""
           line3 = address_hash['line3'] || ""
-          return "Your nearest voting station is: " + locationName+line1+line2+line3
+    return "Your nearest voting station is: " + locationName+line1+line2+line3
+
   end
 
   # status 5 
@@ -102,7 +103,7 @@ module MessagesHelper
       if confirm_respondent(req, responder_id)
         req.update_attributes({status: req.status + 1, responder_id: responder_id})
         send_confirm_to_requester(req)
-        return "Thank you for helping. PLease go to the location & meet up with the requester."
+        return "Thank you for helping. Please go to the location & meet up with the requester."
       else 
         return "Thank you for offering your assistance. Someone else has already been assigned to this request."  
       end
