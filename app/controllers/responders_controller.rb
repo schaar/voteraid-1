@@ -7,7 +7,7 @@ class RespondersController < ApplicationController
   def create
     @responder = Responder.new(responder_params)
     if @responder.save
-      flash[:success] = "Created a New Responder!"
+      flash[:success] = true
       redirect_to root_path
     else
       flash[:error] = @responder.errors.full_messages.join(", ")
