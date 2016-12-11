@@ -1,6 +1,6 @@
 module MessagesHelper
   require 'net/https'
-  require "uri"
+  require 'uri'
 
   require 'rubygems'
   require 'twilio-ruby'
@@ -18,7 +18,7 @@ module MessagesHelper
     when 4
       if /n(o)?/i =~ message.body 
         req.update_attribute(:status, 9)
-        return "Congratulations! Your case has been resolved"
+        return 'Congratulations! Your case has been resolved'
       else
         req.update_attribute(:status, req.status + 1)
         return "Could you provide describe the problem you are experiencing?"
@@ -28,10 +28,10 @@ module MessagesHelper
     when 8 # already contact requestor for feedbacks
       if  /y(es)?/i =~ message.body 
         req.update_attribute(:status, 9)
-        return "Congratulations! Your case has been resolved"
+        return 'Congratulations! Your case has been resolved'
       else
         req.update_attribute(:status, 10)
-        return "We are sorry that we are unavailable to solve the issue right now"
+        return 'We are sorry that we are unavailable to solve the issue right now'
       end
     end
   end

@@ -16,7 +16,8 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="page-scroll" href="#download">Register as a Responder</a>
+            <%= link_to "Register as a Responder", new_responder_path, :method => :get, :class => 'page-scroll' %>
+            <!-- <a class="page-scroll" href="#download">Register as a Responder</a> -->
           </li>
           <li>
             <a class="page-scroll" href="#contact">About</a>
@@ -34,7 +35,7 @@
         <div class="col-sm-7">
           <div class="header-content">
             <div class="header-content-inner">
-              <h1>Voteraid</h1>
+              <%= image_tag("Logos/voteraid_wordandlogomark_Whitemark.png", :class => 'heroimage') %>
             </div>
           </div>
         </div>
@@ -61,7 +62,7 @@
       <div class="row">
         <div class="col-lg-12 text-center">
           <div class="section-heading">
-            <h2>Stop voter intimidation before it starts.</h2>
+            <h2>Stop voter suppression at the source.</h2>
             <hr>
           </div>
         </div>
@@ -72,7 +73,8 @@
       <div class="cta-content">
         <div class="container">
           <h2>Stop waiting.<br>Start helping.</h2>
-          <a href="#contact" class="btn btn-outline btn-xl page-scroll">Let's Get Started!</a>
+          <%= link_to "Let's Get Started!", new_responder_path, :method => :get, :class => "btn btn-outline btn-xl page-scroll" %>
+          <!-- <a href="#contact" class="btn btn-outline btn-xl page-scroll">Let's Get Started!</a> -->
         </div>
       </div>
       <div class="overlay"></div>
