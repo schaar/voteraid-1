@@ -1,5 +1,3 @@
-# note: this repo is deprecated. all future work is taking place at https://github.com/Voter-Aid/voteraid
-
 # VoterAid
 
 *Stop voter intimidation before it starts.*
@@ -21,9 +19,13 @@
 2. Install bundler, which is the package manager for ruby 
 `gem install bundler`
 
-3. Install database **TODO UPON DECIDING DB**
+3. Install and start postgres
+```
+    brew install postgresql
+    brew services start postgresql
+```
 
-4. Clone and change directory into the application
+4. Clone and change into the application directory
 ```
     git clone [REPO_URL]
     cd voteraid
@@ -32,5 +34,11 @@
 5. Install dependencies
 `bundle install`
 
-6. Run!
+6. Create and migrate app database
+```
+    rails db:create
+    rails db:migrate
+```
+
+7. Run!
 `rails s`
