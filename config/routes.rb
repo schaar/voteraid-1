@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   # Messages routes:
   post 'messages/reply', to: 'messages#reply'
 
+  get '*path', to: 'pages#index'
 
 end
