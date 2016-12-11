@@ -18,7 +18,7 @@
 3. User responds with issue number, record it, return information if needed
 4. Ask user if they want to be connected to a responder
 5. User respond if need responder.
-   -If yes, contact responders "there is a requestor with issue...", return to user immediately "connecting now...";
+   -If yes, return to user immediately "connecting now...";
    -if no, set value to resolved, close case, go to status 9
 6. Send to all potential responders, wait for 30 minutes
 7. One responder reply, send "closed" to other responders, send requestor info to responder, send responder info to requestor.
