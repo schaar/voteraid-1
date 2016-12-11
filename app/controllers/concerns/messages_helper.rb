@@ -2,6 +2,10 @@ module MessagesHelper
   require 'net/https'
   require "uri"
 
+  require 'rubygems'
+  require 'twilio-ruby'
+
+
   def handler(req, message)
     puts "Incoming request status : #{req.status} - #{message.body}"
     case req.status
@@ -9,50 +13,112 @@ module MessagesHelper
       req.update_attribute(:status, req.status + 1)
       return "Welcome to VoterAid. What's your location?"
     when 2 # User responds with location
-      return handle_address_ask_issue(req, message)
+      return record_address_ask_issue(req, message)
     when 3 # User responds with issue"
-      return find_issue(req, message)
+      return record_issue_ask_need_responder(req, message)
     when 4
-      return "Do you need to be connected to a responder?"
-    when 5 # If yes, connect to responders; if no, set value to resolved
       if message.body == "no" || message.body == "No"
-        req.update_attribute(:status, 8)
+        req.update_attribute(:status, 9)
         return "Congratulations! Your case has been resolved"
       else
-        return find_responder(req.address)
+        req.update_attribute(status: req.status + 1)
+        return "Could you provide a detailed description?"
       end
-    when 8
+    when 5 
+      req.update_attribute({desc: message.body, status: req.status + 1}) 
+      contact_nearby_responders(req, message)
+      set_timer() # don't need to implement for demo???????
+      return "Connecting to responders. We appreciate your patience"
+    when 6
+      return "waiting 30 minutes"
+    when 7
+      ## ToDo: set listener to hear responder's feedback
+      req.update_attribute(status: req.status + 1)
+      reject_other_respondents(req, message)
+      confirm_respondent(req, message)
+      confirm_requester(req, message)
+    when 8 # already contact requestor "Let us know it has been resolved or not?"
       if message == "yes" || message == "Yes"
+        req.update_attribute(:status, 9)
         return "Congratulations! Your case has been resolved"
       else
+        req.update_attribute(:status, 10)
         return "We are sorry that we are unavailable to solve the issue right now"
       end
     end
   end
 
-  def find_issue(req, message)
+  def record_address_ask_issue(req, message)
+    req.update_attributes({address: message.body, status: req.status + 1})
+    text = "Thank you. What is your issue?\n1.Problem with ID\n2.Name not on registration list\n3.Eligibility to vote was challenged\n4.Can't check in at the poll\n5.Problem with voting machine\n6.Line to vote is too long\n7.Problem with provisional ballot\n8.Other"
+    return text
+  end
+
+  def record_issue_ask_need_responder(req, message)
     num = message.body.to_i
     if (num>0 && num < 9)
+      if (num == 6) #voting line too long 
+        info = find_poll_addr(req.address)
+      info = info || ""
       req.update_attributes({issue: num, status: req.status+1})
-      return "Thanks"
+      return info + "Do you need to be connected to a responder?"
     else
       ## DO NOT INCREMENT STATE
       return "Sorry, invalid input. Please reply with the number code of your issue"
     end
   end
 
-  def find_responder(requester_address)
-    ### LOGIC FOR FINDING RESPONDERS & NOTIFY THEM
-    return "We're looking up responders near you. Please stay at your location."
+  def contact_nearby_responders(req, message)
+    @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
+    from = ENV["TWILIO_NUMBER"] 
+    issue = index_to_issue(req.issue)
+    # ToDo: Add logic to find responders
+    responders = {
+    "+15107103579" => "Lawyer Yao"
+    }
+    responders.each do |key, value|
+      client.account.messages.create(
+        :from => from,
+        :to => key,
+        :body => "Hi, someone near #{req.address} needs your help. He/She is facing \
+        the issue of " + issue +  " Specfically, the description is: #{req.desc}"
+      )
+      puts "Sent message to #{value}"
   end
 
-  def handle_address_ask_issue(req, message)
-
-    req.update_attributes({address: message.body, status: req.status + 1})
-    text = "Thank you. What is your issue?\n1.Problem with ID\n2.Name not on registration list\n3.Eligibility to vote was challenged\n4.Can't check in at the poll\n5.Problem with voting machine\n6.Line to vote is too long\n7.Problem with provisional ballot\n8.Problem with provisional ballot"
-    return text
+  def index_to_issue(index) 
+    case index
+    when 1
+      return "Problem with ID"
+    when 2
+      return "Name not on registration list"
+    when 3
+      return "Eligibility to vote was challenged"
+    when 4
+      return "Cannot check in at the poll"
+    when 5
+      return "Problem with voting machine"
+    when 6
+      return "Line to vote is too long"
+    when 7
+      return "Problem with provisional ballot"
+    when 8
+      return "Other"
+    end
   end
 
+  def set_timer()
+  end
+
+  def reject_other_respondents(req, message)
+  end
+
+  def confirm_respondent(req, message)
+  end
+
+  def confirm_requester(req, message)
+  end
+ 
   def find_poll_addr(message_addr)
     # m_request_id = Message.find_by(request_id: m_request_id)
     ## below are referenced from http://www.rubyinside.com/nethttp-cheat-sheet-2940.html\
