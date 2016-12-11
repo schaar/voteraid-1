@@ -1,5 +1,5 @@
-resource :messages do
-  collection do
-    post 'reply'
-  end
-end
+# resource :messages do
+#   collection do
+#     post 'reply'
+#   end
+# end

@@ -15,4 +15,10 @@ Rails.application.routes.draw do
 
   get '*path', to: 'pages#index'
 
+  # resource :messages do
+  #   collection do
+  #     post 'reply'
+  #   end
+  # end
+
 end
