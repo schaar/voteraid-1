@@ -2,8 +2,10 @@
 
 #### Initial request
 
-1. Ask user what issue is
-2. User responds with issue
+1. Ask for location
+2. User responds with location
+3. Ask user what issue is
+4. User responds with issue
   1. Problem with ID
     - respond with ID info
   2. name not on registration list
@@ -15,12 +17,12 @@
   6. line to vote is too long
   7. problem with provisional ballot
   8. other
-3. Ask if user needs a responder
-4. If yes, ask for address; if no, set value to resolved
-5. Contact responders
-6. If responder confirms, send info to user
-7. Let us know it has been resolved or not?
-8. Resolved
+5. Ask if user needs a responder
+6. If yes, ask for address; if no, set value to resolved
+7. Contact responders
+8. If responder confirms, send info to user
+9. Let us know it has been resolved or not?
+10. Resolved
 
 ### Routing Process
 - Store request ID in session
