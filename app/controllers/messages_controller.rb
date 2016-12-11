@@ -47,8 +47,7 @@ class MessagesController < ApplicationController
         @client.account.messages.create(
           :from => from,
           :to => person.phone,
-          :body => "Hi, someone near #{@req.address} needs your help. He/She is facing \
-        the issue of " + issue +  " Specfically, the description is: #{@req.desc}"
+          :body => "Hi, someone near #{@req.address} needs your help. He/She is facing the issue of " + issue +  " Specfically, the description is: #{@req.desc}. Please repond with YES if you are able to help."
         )
         puts "Sent request for help to #{person.fname}"
       end
@@ -61,6 +60,25 @@ class MessagesController < ApplicationController
     @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
   end
 
-
+  def index_to_issue(index) 
+    case index
+    when 1
+      return "Problem with ID"
+    when 2
+      return "Name not on registration list"
+    when 3
+      return "Eligibility to vote was challenged"
+    when 4
+      return "Cannot check in at the poll"
+    when 5
+      return "Problem with voting machine"
+    when 6
+      return "Line to vote is too long"
+    when 7
+      return "Problem with provisional ballot"
+    when 8
+      return "Other"
+    end
+  end
 
 end
