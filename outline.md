@@ -22,7 +22,8 @@
    -if no, set value to resolved, close case, go to status 8
 6. One responder reply, send "closed" to other responders, send requestor info to responder, send responder info to requestor.
 7. After some hours, contact requestor "Let us know it has been resolved or not?"
-8. Record if has been resolved, for analysis purpose
+8. Set to resolved
+9. Set to not_resolved
 
 ### Routing Process
 - Store request ID in session
