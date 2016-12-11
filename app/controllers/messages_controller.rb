@@ -52,7 +52,8 @@ class MessagesController < ApplicationController
         @client.account.messages.create(
           :from => from,
           :to => person.phone,
-          :body => "Hi, someone near #{@req.address} needs your help. He/She is facing the issue of " + issue +  " Specfically, the description is: #{@req.desc}. Please repond with YES if you are able to help."
+          :body => "Hi, someone near #{@req.address} needs your help. The voter is experiencing this issue: " 
+          + issue +  "\nThey have described the issue as: #{@req.desc}. Please repond with Yes if you are able to help."
         )
         puts "Sent request for help to #{person.fname}"
       end
