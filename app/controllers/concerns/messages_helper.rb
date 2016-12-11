@@ -5,13 +5,12 @@ module MessagesHelper
   require 'rubygems'
   require 'twilio-ruby'
 
-
   def handler(req, message)
     puts "Incoming request status : #{req.status} - #{message.body}"
     case req.status
     when 1
       req.update_attribute(:status, req.status + 1)
-      return "Welcome to VoterAid. What's your location?"
+      return "Welcome to VoterAid. What's your address of registration?\n Please respond with full street address, city and state."
     when 2 # User responds with location
       return record_address_ask_issue(req, message)
     when 3 # User responds with issue"
@@ -24,18 +23,9 @@ module MessagesHelper
         req.update_attribute(:status, req.status + 1)
         return "Could you provide a detailed description?"
       end
-    when 5
-      req.update_attribute(:desc, message.body)
-      finding = contact_nearby_responders(req, message)
-      if finding
-        req.update_attribute(:status, req.status+1)
-        return "Connecting to responders. We appreciate your patience"
-      else
-        req.update_attribute(:status, 10)
-        return "We are sorry, no body is available to assist right now"
-      end
     when 6
-      return "waiting 30 minutes"
+      return "Please wait. We are still matching your request up."
+      # return "waiting 30 minutes"
     when 7
       ## ToDo: set listener to hear responder's feedback
       req.update_attribute(:status, req.status + 1)
@@ -52,6 +42,18 @@ module MessagesHelper
       end
     end
   end
+
+  def handle_help_request(req, message)
+      req.update_attribute(:desc, message.body)
+      finding = find_nearby_responders(req, message)
+      if finding.count(:all) > 0
+        req.update_attribute(:status, req.status+1)
+        return "Connecting to responders. We appreciate your patience" ,finding
+      else
+        req.update_attribute(:status, 10)
+        return "We are sorry, no body is available to assist right now", finding
+      end
+  end   
 
   def record_address_ask_issue(req, message)
     req.update_attributes({address: message.body, status: req.status + 1})
@@ -74,29 +76,31 @@ module MessagesHelper
     end
   end
 
-  def contact_nearby_responders(req, message)
-    @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
-    from = ENV["TWILIO_NUMBER"]
-    issue = index_to_issue(req.issue)
+  def find_nearby_responders(req, message)
     # ToDo: Add logic to find responders
     responders = Responder.near(req.address, 50).limit(5)
-    if responders.count > 0
-      responders.each do |person|
-        @client.account.messages.create(
-          :from => from,
-          :to => person.phone,
-          :body => "Hi, someone near #{req.address} needs your help. He/She is facing \
-        the issue of " + issue +  " Specfically, the description is: #{req.desc}"
-        )
-        puts "Sent request for help to #{person.fname}"
-      end
-      return true
-    else
-      return false
-    end
+    return responders
   end
 
-  def index_to_issue(index)
+  def handle_responder(req,responder_id)
+      if confirm_respondent(req, responder_id)
+        req.update_attributes({status: req.status + 1, responder_id: responder_id})
+        send_confirm_to_requester(req)
+        return "Thank you for helping. P..."
+      else 
+        return "Thank you for offering your assistance. Someone else has already been assigned to this request."  
+      end
+  end
+
+  def confirm_respondent(req, responder_id)
+   # check that respondent exist and request status is 6
+    if req.status != 6
+      return false
+    end
+    return !Responder.find(responder_id).nil?
+  end
+
+  def index_to_issue(index) 
     case index
     when 1
       return "Problem with ID"
@@ -117,16 +121,17 @@ module MessagesHelper
     end
   end
 
-  def set_timer()
-  end
-
-  def reject_other_respondents(req, message)
-  end
-
-  def confirm_respondent(req, message)
-  end
-
-  def confirm_requester(req, message)
+  def send_confirm_to_requester(req)
+    @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
+    from = ENV["TWILIO_NUMBER"] 
+    responder = req.responder
+    client.account.messages.create(
+      :from => from,
+      :to => req.phone,
+      :body => "Congratulations! We find someone who could assist you. His/Her name \
+      is #{responder.fname} + #{responder.lname} and phone number is: #{responder.phone} "
+    )
+    puts "Sent message to #{value}"
   end
 
   def find_poll_addr(message_addr)
