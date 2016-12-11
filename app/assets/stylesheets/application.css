@@ -18,3 +18,8 @@
  .btn-outline-secondary {
    margin-top: 10;
  }
+
+ .heroimage {
+   max-width: 100%;
+   height: auto !important;
+ }
