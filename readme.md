@@ -12,6 +12,10 @@
 - Respond to instances of voter suppression immediately
 - Analyze reported incidents to influence policy
 
+## Our Wishlist
+
+Keep an eye out on the list of extra stuff we want to add here. You can see them on our [Projects Board](https://github.com/Voter-Aid/voteraid/projects/2).
+
 ## The Brains
 
 
