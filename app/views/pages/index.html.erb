@@ -35,6 +35,9 @@
         <div class="col-sm-7">
           <div class="header-content">
             <div class="header-content-inner">
+              <% if flash[:success] %>
+                <p class="success">Thanks for signing up!</p>
+              <% end %>
               <%= image_tag("Logos/voteraid_wordandlogomark_Whitemark.png", :class => 'heroimage') %>
             </div>
           </div>
