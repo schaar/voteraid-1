@@ -113,7 +113,7 @@ module MessagesHelper
     @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
     from = ENV["TWILIO_NUMBER"] 
     responder = req.responder
-    client.account.messages.create(
+    @client.account.messages.create(
       :from => from,
       :to => req.phone,
       :body => "We've matched you with someone in your local precinct. Contact #{responder.fname} at #{responder.phone} "
