@@ -1,4 +1,4 @@
-# Request Process
+# Request Process (WIP)
 1. Initial request
 2. Ask user for registered voting address
 3. Get address
