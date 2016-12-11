@@ -17,7 +17,11 @@ class MessagesController < ApplicationController
       @message = @req.messages.create({body: message_body})
     else
       @req = Request.find(session["request_id"])
-      @message = @req.messages.create({body: message_body})
+      if session['responder_id'] and /Y(es)?/.match(message_body)
+        @message = handle_responder(@req, session['responder_id'])
+      else
+        @message = @req.messages.create({body: message_body})
+      end
     end
     session["request_id"] = @req.id
     boot_twilio

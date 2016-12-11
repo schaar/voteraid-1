@@ -21,19 +21,24 @@ module MessagesHelper
         req.update_attribute(:status, 9)
         return "Congratulations! Your case has been resolved"
       else
-        req.update_attribute(status: req.status + 1)
+        req.update_attribute(:status, req.status + 1)
         return "Could you provide a detailed description?"
       end
-    when 5 
-      req.update_attribute({desc: message.body, status: req.status + 1}) 
-      contact_nearby_responders(req, message)
-      set_timer() # don't need to implement for demo???????
-      return "Connecting to responders. We appreciate your patience"
+    when 5
+      req.update_attribute(:desc, message.body)
+      finding = contact_nearby_responders(req, message)
+      if finding
+        req.update_attribute(:status, req.status+1)
+        return "Connecting to responders. We appreciate your patience"
+      else
+        req.update_attribute(:status, 10)
+        return "We are sorry, no body is available to assist right now"
+      end
     when 6
       return "waiting 30 minutes"
     when 7
       ## ToDo: set listener to hear responder's feedback
-      req.update_attribute(status: req.status + 1)
+      req.update_attribute(:status, req.status + 1)
       reject_other_respondents(req, message)
       confirm_respondent(req, message)
       confirm_requester(req, message)
@@ -57,8 +62,9 @@ module MessagesHelper
   def record_issue_ask_need_responder(req, message)
     num = message.body.to_i
     if (num>0 && num < 9)
-      if (num == 6) #voting line too long 
+      if (num == 6) #voting line too long
         info = find_poll_addr(req.address)
+      end
       info = info || ""
       req.update_attributes({issue: num, status: req.status+1})
       return info + "Do you need to be connected to a responder?"
@@ -70,23 +76,27 @@ module MessagesHelper
 
   def contact_nearby_responders(req, message)
     @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
-    from = ENV["TWILIO_NUMBER"] 
+    from = ENV["TWILIO_NUMBER"]
     issue = index_to_issue(req.issue)
     # ToDo: Add logic to find responders
-    responders = {
-    "+15107103579" => "Lawyer Yao"
-    }
-    responders.each do |key, value|
-      client.account.messages.create(
-        :from => from,
-        :to => key,
-        :body => "Hi, someone near #{req.address} needs your help. He/She is facing \
+    responders = Responder.near(req.address, 50).limit(5)
+    if responders.count > 0
+      responders.each do |person|
+        @client.account.messages.create(
+          :from => from,
+          :to => person.phone,
+          :body => "Hi, someone near #{req.address} needs your help. He/She is facing \
         the issue of " + issue +  " Specfically, the description is: #{req.desc}"
-      )
-      puts "Sent message to #{value}"
+        )
+        puts "Sent request for help to #{person.fname}"
+      end
+      return true
+    else
+      return false
+    end
   end
 
-  def index_to_issue(index) 
+  def index_to_issue(index)
     case index
     when 1
       return "Problem with ID"
@@ -118,7 +128,7 @@ module MessagesHelper
 
   def confirm_requester(req, message)
   end
- 
+
   def find_poll_addr(message_addr)
     # m_request_id = Message.find_by(request_id: m_request_id)
     ## below are referenced from http://www.rubyinside.com/nethttp-cheat-sheet-2940.html\
