@@ -24,6 +24,18 @@ module MessagesHelper
         return locationName+line1+line2+line3
     # puts response.body
   end
+
+  def handler(req, message)
+    #case req.status
+    #return body
+  end
+
+  def id_issue
+    return ".........Laws & such"
+  end
+
+  def find_closest_responders
+  end
 end
 
 

@@ -22,6 +22,7 @@ class MessagesController < ApplicationController
     session["request_id"] = @req.id
     boot_twilio
     # when reply, test to return the nearest polling address
+    @body = handler(@req, @message)
     poll_addr = find_poll_addr("2020 kittredge street")
     sms = @client.messages.create(
       from: ENV["TWILIO_NUMBER"],
