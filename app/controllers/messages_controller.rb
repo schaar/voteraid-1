@@ -19,14 +19,11 @@ class MessagesController < ApplicationController
     else
       if @responder
         @req = Request.last
+        puts "Responder reply"
       else
         @req = Request.find(session["request_id"])
       end
-      if @responder and /Y(es)?/i.match(message_body)
-        @message = handle_responder(@req, @responder.id)
-      else
-        @message = @req.messages.create({body: message_body})
-      end
+      @message = @req.messages.create({body: message_body})
     end
     session["request_id"] = @req.id
     boot_twilio
@@ -34,6 +31,8 @@ class MessagesController < ApplicationController
     # when reply, test to return the nearest polling address
     if @req.status == 5
       @body, @nearby = handle_help_request(@req, @message)
+    elsif @responder and /Y(es)?/i.match(message_body)
+      @body = handle_responder(@req, @responder.id)
     else
       @body = handler(@req, @message)
     end
