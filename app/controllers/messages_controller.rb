@@ -28,8 +28,7 @@ class MessagesController < ApplicationController
       from: ENV["TWILIO_NUMBER"],
       to: from_number,
       body: "Request ID: #{@req.id}. Your number is #{from_number}. \
-            your nearest voting stationis #{poll_addr}"
-
+         #{body}"
     )
     
   end
