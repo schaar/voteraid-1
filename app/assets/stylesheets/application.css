@@ -10,6 +10,20 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require bootstrap.min
  *= require_tree .
  *= require_self
  */
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans|Raleway);
+
+/*font-family: 'Raleway', sans-serif;
+font-family: 'Open Sans', sans-serif;*/
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  font-family: 'Raleway', sans-serif;
+}

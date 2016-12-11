@@ -1,0 +1,24 @@
+<%= form_for @responder do |f| %>
+  <%= f.label "First Name" %>
+  <%= f.text_field :fname, placeholder: "First Name", required: true %> <br />
+
+  <%= f.label "Last Name" %>
+  <%= f.text_field :lname, placeholder: "Last Name", required: true %> <br />
+
+  <%= f.label "Phone Number" %>
+  <%= f.text_field :phone, placeholder: "Phone Number", required: true %> <br />
+
+  <%= f.label "Email" %>
+  <%= f.text_field :email, placeholder: "Email", required: true %> <br />
+
+  <%= f.label "Bar Number?" %>
+  <%= f.text_field :barNum, placeholder: "Optional State Bar Number", required: false %> <br />
+
+  <%= f.label "State" %>
+  <%= f.text_field :state, placeholder: "Which state are you in?", required: true %> <br />
+
+  <%= f.label "Zip Code" %>
+  <%= f.text_field :zip, placeholder: "What's your zipcode?", required: true %> <br />
+
+  <%= f.submit "Submit", :class => 'btn btn-success' %>
+<% end %>
