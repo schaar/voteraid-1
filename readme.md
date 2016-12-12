@@ -1,6 +1,6 @@
 # VoterAid
 
-*Stop voter intimidation at the source.*
+*Stop voter suppression at the source.*
 
 ## What it does
 
